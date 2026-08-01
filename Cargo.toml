@@ -1,0 +1,17 @@
+[workspace]
+resolver = "3"
+members = ["apps/cli","apps/desktop/src-tauri", "crates/common"]
+
+[profile.release.package."*"]
+opt-level = 3
+
+[profile.release]
+opt-level = 3          # Maximum optimization for speed
+lto = "fat"            # Most aggressive cross-crate optimization
+codegen-units = 1      # Best optimization opportunities
+panic = "abort"        # Removes unwinding overhead
+strip = true           # Smaller binary, faster loading
+incremental = false    # Better final optimization
+debug = false          # No debug info
+overflow-checks = false
+debug-assertions = false
