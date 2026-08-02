@@ -1,6 +1,6 @@
 [workspace]
 resolver = "3"
-members = ["apps/cli","apps/desktop/src-tauri", "crates/common"]
+members = ["apps/cli","apps/desktop/src-tauri", "crates/common", "crates/database"]
 
 [profile.release.package."*"]
 opt-level = 3
@@ -15,3 +15,8 @@ incremental = false    # Better final optimization
 debug = false          # No debug info
 overflow-checks = false
 debug-assertions = false
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+database = { path = "crates/database" }
+common = { path = "crates/common" }
