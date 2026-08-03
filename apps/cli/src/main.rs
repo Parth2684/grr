@@ -30,7 +30,6 @@ async fn main() {
     let cli = Cli::parse();
     match cli.commands {
         Commands::Count { path, exclude } => {
-            // exclude.iter_mut().for_each(|str| str.as_str(););
             let path: PathBuf = PathBuf::from(path);
             let exclude_strs: Vec<&str> = exclude
                 .iter()

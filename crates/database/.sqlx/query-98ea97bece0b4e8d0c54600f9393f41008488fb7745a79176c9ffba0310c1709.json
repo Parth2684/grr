@@ -1,0 +1,26 @@
+{
+  "db_name": "SQLite",
+  "query": "\n        SELECT present FROM vault\n        WHERE id = 1\n    ",
+  "describe": {
+    "columns": [
+      {
+        "name": "present",
+        "ordinal": 0,
+        "type_info": "Bool",
+        "origin": {
+          "Table": {
+            "table": "vault",
+            "name": "present"
+          }
+        }
+      }
+    ],
+    "parameters": {
+      "Right": 0
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "98ea97bece0b4e8d0c54600f9393f41008488fb7745a79176c9ffba0310c1709"
+}

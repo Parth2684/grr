@@ -3,6 +3,7 @@ use sqlx::migrate::{Migrator};
 
 
 pub mod connection;
+pub mod queries;
 
 pub static MIGRATOR: Migrator = sqlx::migrate!("./migrations");
 
