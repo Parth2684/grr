@@ -4,3 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+tokei = { version = "14.0.0", features = ["all"] }
+sqlx = { workspace = true }
+database = { workspace = true }
+cli-table = "0.5.0"

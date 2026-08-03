@@ -20,3 +20,4 @@ debug-assertions = false
 tokio = { version = "1", features = ["full"] }
 database = { path = "crates/database" }
 common = { path = "crates/common" }
+sqlx = { version = "0.9.0", features = ["sqlite", "runtime-tokio", "migrate", "macros", "chrono"] }
