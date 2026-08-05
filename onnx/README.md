@@ -15,7 +15,7 @@ Generated: 2026-08-05 19:31:32.870984
 |---:|---|---|---:|---:|---:|---:|---:|---:|---:|
 |1|embedding_int8_dynamic|Embedding|471.65|1993.91|123.22|123.42|8.10|3689.55|0.8685634136|
 |2|embedding_fp16|Embedding|942.51|3195.93|173.51|187.30|5.34|4204.14|0.9998064041|
-|3|embedding_sim|Embedding|0.25|2899.05|186.07|182.42|5.48|3613.19|1.0000000000|
+|3|embedding_sim|Embedding|1884.81|2899.05|186.07|182.42|5.48|3613.19|1.0000000000|
 |5|embedding_fp32|Embedding|1884.81|2748.33|182.80|184.56|5.42|3754.42|1.0000000000|
 
 
@@ -70,7 +70,7 @@ Generated: 2026-08-05 19:31:32.870984
 
 - Path: `simplified/embedding_sim.onnx`
 - Output Format: Embedding
-- Model Size: 0.25 MB
+- Model Size: 1884.81 MB
 
 ## Performance
 
@@ -242,9 +242,93 @@ Generated: 2026-08-05 19:31:32.870984
 
 # Conclusions
 
-**Fastest:** embedding_int8_dynamic
+### 🏆 Fastest
+**embedding_int8_dynamic**
 
-**Smallest:** embedding_sim
+- Highest throughput
+- ~33% faster than the FP32 model
+- ~75% smaller than the FP32 model
+- Recommended for memory-constrained systems where maximum speed is preferred over maximum embedding accuracy.
 
-**Most Accurate:** embedding_sim
+---
+
+### 🎯 Most Accurate
+**embedding_fp32**
+
+- Cosine similarity: **1.0000000000**
+- Serves as the reference implementation.
+- Produces embeddings numerically equivalent to the original exported model.
+- Recommended whenever maximum embedding fidelity is required.
+
+---
+
+### 📦 Smallest
+**embedding_int8_dynamic**
+
+- Model size: **471.65 MB**
+- Approximately 4× smaller than the FP32 model.
+
+---
+
+### 💻 Best Overall (CPU)
+**embedding_fp32**
+
+Reasons:
+
+- Highest measured accuracy.
+- Slightly faster than the simplified model in this benchmark.
+- Excellent balance between accuracy, stability and performance.
+- Serves as the reference model for all comparisons.
+- Recommended default model for most CPU users.
+
+---
+
+### 🎮 Best for GPU Users
+**embedding_fp16**
+
+- Approximately 50% smaller than FP32.
+- Cosine similarity: **0.9998064041**.
+- Expected to benefit from native FP16 acceleration on modern NVIDIA, AMD ROCm and Apple Silicon GPUs.
+- On CPUs, FP16 provides little to no performance improvement due to limited hardware support.
+
+---
+
+### 🔧 Simplified Model
+
+The simplified model was created as an optimization experiment during development.
+
+Changes compared to the original export:
+
+- Removed KV-cache outputs.
+- Embedded last-token pooling into the graph.
+- Embedded L2 normalization into the graph.
+- Reduced the model output to a single `(batch_size, 896)` embedding.
+- Simplified the ONNX graph using ONNX Simplifier.
+
+Benchmark results show that it produces embeddings that are effectively identical to the FP32 model while offering comparable runtime performance.
+
+Since the FP32 model already provides the same embedding quality and slightly better performance in these benchmarks, the simplified model is retained only for experimentation and is **not included in the final released models**.
+
+---
+
+### 📊 Performance Summary
+
+|Metric|Best Model|
+|---|---|
+|Fastest Inference|embedding_int8_dynamic|
+|Smallest Download|embedding_int8_dynamic|
+|Best Accuracy|embedding_fp32|
+|Best Overall (CPU)|embedding_fp32|
+|Best GPU Choice|embedding_fp16|
+|Simplest Graph|embedding_fp32|
+
+---
+
+### ⚠ Notes
+
+- **embedding_fp32** is the recommended default model and serves as the accuracy reference.
+- **embedding_sim** produces equivalent embeddings while simplifying the exported computation graph and output interface and used for quantizing models.
+- **embedding_fp16** substantially reduces storage requirements while maintaining near-identical embedding quality, making it well suited for GPU inference.
+- **embedding_int8_dynamic** offers the highest throughput and smallest footprint, but the observed cosine similarity indicates a measurable reduction in embedding quality. It is best suited for memory-constrained or latency-sensitive deployments.
+- Benchmarks were collected using **ONNX Runtime CPUExecutionProvider**. Performance characteristics will vary across CUDA, ROCm, DirectML, CoreML and TensorRT execution providers.
 
