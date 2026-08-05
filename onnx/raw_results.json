@@ -1,0 +1,292 @@
+[
+    {
+        "model": "embedding_int8_dynamic",
+        "path": "models/embedding_int8_dynamic.onnx",
+        "size_mb": 471.6513156890869,
+        "error": null,
+        "format": "Embedding",
+        "load_ms": 1993.911670999978,
+        "cold_ms": 123.22436733332627,
+        "warm_ms": 123.42365920000097,
+        "embeddings_per_second": 8.102174303385036,
+        "rss_mb": 3689.5546875,
+        "cosine": 0.8685634136199951,
+        "max_difference": 0.08268744498491287,
+        "mean_difference": 0.013524048961699009,
+        "l2_distance": 0.5127114653587341,
+        "largest_dimensions": [
+            {
+                "dimension": 47,
+                "difference": 0.08268744498491287
+            },
+            {
+                "dimension": 383,
+                "difference": 0.06017056852579117
+            },
+            {
+                "dimension": 438,
+                "difference": 0.05403727665543556
+            },
+            {
+                "dimension": 545,
+                "difference": 0.05155815929174423
+            },
+            {
+                "dimension": 255,
+                "difference": 0.04986805468797684
+            },
+            {
+                "dimension": 221,
+                "difference": 0.04945890232920647
+            },
+            {
+                "dimension": 766,
+                "difference": 0.04871403053402901
+            },
+            {
+                "dimension": 861,
+                "difference": 0.04844215512275696
+            },
+            {
+                "dimension": 243,
+                "difference": 0.04801889881491661
+            },
+            {
+                "dimension": 736,
+                "difference": 0.0469541922211647
+            }
+        ]
+    },
+    {
+        "model": "embedding_sim",
+        "path": "simplified/embedding_sim.onnx",
+        "size_mb": 0.24651241302490234,
+        "error": null,
+        "format": "Embedding",
+        "load_ms": 2899.0474509998876,
+        "cold_ms": 186.0744408888877,
+        "warm_ms": 182.41837128111632,
+        "embeddings_per_second": 5.481904004388611,
+        "rss_mb": 3613.19140625,
+        "cosine": 1.0,
+        "max_difference": 2.2165477275848389e-07,
+        "mean_difference": 4.128560959770766e-08,
+        "l2_distance": 1.5632157328582252e-06,
+        "largest_dimensions": [
+            {
+                "dimension": 690,
+                "difference": 2.2165477275848389e-07
+            },
+            {
+                "dimension": 798,
+                "difference": 1.9744038581848145e-07
+            },
+            {
+                "dimension": 54,
+                "difference": 1.7881393432617188e-07
+            },
+            {
+                "dimension": 741,
+                "difference": 1.5832483768463135e-07
+            },
+            {
+                "dimension": 621,
+                "difference": 1.564621925354004e-07
+            },
+            {
+                "dimension": 61,
+                "difference": 1.5320256352424622e-07
+            },
+            {
+                "dimension": 427,
+                "difference": 1.4901161193847656e-07
+            },
+            {
+                "dimension": 549,
+                "difference": 1.4528632164001465e-07
+            },
+            {
+                "dimension": 360,
+                "difference": 1.4156103134155273e-07
+            },
+            {
+                "dimension": 39,
+                "difference": 1.3969838619232178e-07
+            }
+        ]
+    },
+    {
+        "model": "embedding_fp32",
+        "path": "models/embedding_fp32.onnx",
+        "size_mb": 1884.8087549209595,
+        "error": null,
+        "format": "Embedding",
+        "load_ms": 2748.325450999914,
+        "cold_ms": 182.79707155556935,
+        "warm_ms": 184.5597968866669,
+        "embeddings_per_second": 5.418298117298387,
+        "rss_mb": 3754.41796875,
+        "cosine": 1.0,
+        "max_difference": 2.2165477275848389e-07,
+        "mean_difference": 4.128560959770766e-08,
+        "l2_distance": 1.5632157328582252e-06,
+        "largest_dimensions": [
+            {
+                "dimension": 690,
+                "difference": 2.2165477275848389e-07
+            },
+            {
+                "dimension": 798,
+                "difference": 1.9744038581848145e-07
+            },
+            {
+                "dimension": 54,
+                "difference": 1.7881393432617188e-07
+            },
+            {
+                "dimension": 741,
+                "difference": 1.5832483768463135e-07
+            },
+            {
+                "dimension": 621,
+                "difference": 1.564621925354004e-07
+            },
+            {
+                "dimension": 61,
+                "difference": 1.5320256352424622e-07
+            },
+            {
+                "dimension": 427,
+                "difference": 1.4901161193847656e-07
+            },
+            {
+                "dimension": 549,
+                "difference": 1.4528632164001465e-07
+            },
+            {
+                "dimension": 360,
+                "difference": 1.4156103134155273e-07
+            },
+            {
+                "dimension": 39,
+                "difference": 1.3969838619232178e-07
+            }
+        ]
+    },
+    {
+        "model": "embedding",
+        "path": "original/embedding.onnx",
+        "size_mb": 1887.712547302246,
+        "error": null,
+        "format": "Embedding",
+        "load_ms": 3768.6728379999295,
+        "cold_ms": 184.8753292222101,
+        "warm_ms": 186.73867571444637,
+        "embeddings_per_second": 5.355077067854769,
+        "rss_mb": 3626.3671875,
+        "cosine": 1.0,
+        "max_difference": 2.2165477275848389e-07,
+        "mean_difference": 4.128560959770766e-08,
+        "l2_distance": 1.5632157328582252e-06,
+        "largest_dimensions": [
+            {
+                "dimension": 690,
+                "difference": 2.2165477275848389e-07
+            },
+            {
+                "dimension": 798,
+                "difference": 1.9744038581848145e-07
+            },
+            {
+                "dimension": 54,
+                "difference": 1.7881393432617188e-07
+            },
+            {
+                "dimension": 741,
+                "difference": 1.5832483768463135e-07
+            },
+            {
+                "dimension": 621,
+                "difference": 1.564621925354004e-07
+            },
+            {
+                "dimension": 61,
+                "difference": 1.5320256352424622e-07
+            },
+            {
+                "dimension": 427,
+                "difference": 1.4901161193847656e-07
+            },
+            {
+                "dimension": 549,
+                "difference": 1.4528632164001465e-07
+            },
+            {
+                "dimension": 360,
+                "difference": 1.4156103134155273e-07
+            },
+            {
+                "dimension": 39,
+                "difference": 1.3969838619232178e-07
+            }
+        ]
+    },
+    {
+        "model": "embedding_fp16",
+        "path": "models/embedding_fp16.onnx",
+        "size_mb": 942.5180521011353,
+        "error": null,
+        "format": "Embedding",
+        "load_ms": 3195.9374209999964,
+        "cold_ms": 173.51772744444185,
+        "warm_ms": 187.30486505000107,
+        "embeddings_per_second": 5.338889621116087,
+        "rss_mb": 4204.14453125,
+        "cosine": 0.9998064041137695,
+        "max_difference": 9.134598076343536e-05,
+        "mean_difference": 2.241234506072942e-05,
+        "l2_distance": 0.0008360773208551109,
+        "largest_dimensions": [
+            {
+                "dimension": 601,
+                "difference": 9.134598076343536e-05
+            },
+            {
+                "dimension": 513,
+                "difference": 8.40798020362854e-05
+            },
+            {
+                "dimension": 115,
+                "difference": 8.136406540870667e-05
+            },
+            {
+                "dimension": 427,
+                "difference": 8.061528205871582e-05
+            },
+            {
+                "dimension": 403,
+                "difference": 7.974077016115189e-05
+            },
+            {
+                "dimension": 649,
+                "difference": 7.83279538154602e-05
+            },
+            {
+                "dimension": 741,
+                "difference": 7.713958621025085e-05
+            },
+            {
+                "dimension": 101,
+                "difference": 7.680244743824005e-05
+            },
+            {
+                "dimension": 493,
+                "difference": 7.319683209061623e-05
+            },
+            {
+                "dimension": 423,
+                "difference": 7.246807217597961e-05
+            }
+        ]
+    }
+]
