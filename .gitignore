@@ -1,7 +1,6 @@
 target
 .env
 .venv
-models
 original
 simplified
-tokenizer
+quantized

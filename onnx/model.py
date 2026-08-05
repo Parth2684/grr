@@ -16,3 +16,5 @@ tokenizer = AutoTokenizer.from_pretrained(
     MODEL,
     trust_remote_code=True,
 )
+
+tokenizer.save_pretrained("tokenizer")
