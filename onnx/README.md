@@ -14,7 +14,7 @@ Generated: 2026-08-05 19:31:32.870984
 |Rank|Model|Format|Size (MB)|Load (ms)|Cold (ms)|Warm (ms)|Emb/s|RSS (MB)|Cosine|
 |---:|---|---|---:|---:|---:|---:|---:|---:|---:|
 |1|embedding_int8_dynamic|Embedding|471.65|1993.91|123.22|123.42|8.10|3689.55|0.8685634136|
-|2|embedding_fp16|Embedding|1884.80|1999.43|148.82|151.81|6.59|4171.31|0.9998064041|
+|2|embedding_fp16|Embedding|942.51|3195.93|173.51|187.30|5.34|4204.14|0.9998064041|
 |3|embedding_sim|Embedding|0.25|2899.05|186.07|182.42|5.48|3613.19|1.0000000000|
 |5|embedding_fp32|Embedding|1884.81|2748.33|182.80|184.56|5.42|3754.42|1.0000000000|
 
@@ -200,7 +200,7 @@ Generated: 2026-08-05 19:31:32.870984
 
 ## Information
 
-- Path: `models/embedding_fp16_repaired.onnx`
+- Path: `models/embedding_fp16.onnx`
 - Output Format: Embedding
 - Model Size: 942.52 MB
 
