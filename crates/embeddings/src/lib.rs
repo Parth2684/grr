@@ -1,14 +1,8 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+mod recommendation;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+pub enum Models {
+    Fp32,
+    Fp16,
+    Int8
 }
