@@ -5,7 +5,7 @@ MODEL = "jinaai/jina-code-embeddings-0.5b"
 
 model = AutoModel.from_pretrained(
     MODEL,
-    trust_remote_code=True,
+    trust_remote_code=False,
 )
 
 # Disable KV cache before export
@@ -14,7 +14,7 @@ model.eval()
 
 tokenizer = AutoTokenizer.from_pretrained(
     MODEL,
-    trust_remote_code=True,
+    trust_remote_code=False,
 )
 
 tokenizer.save_pretrained("tokenizer")

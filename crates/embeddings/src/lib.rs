@@ -1,5 +1,5 @@
 
-mod recommendation;
+mod test;
 
 pub enum Models {
     Fp32,
