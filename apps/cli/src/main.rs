@@ -38,14 +38,14 @@ enum Commands {
 
 #[tokio::main]
 async fn main() {
-    let app = AppState::new().await;
+    let state = AppState::new().await;
     let cli = Cli::parse();
     match cli.commands {
         Commands::Count { path, exclude } => {
             count_lines(path, exclude);
         },
         Commands::Download(_) => {
-            download_command_interactive();
+            download_command_interactive(&state);
         }
     }
 }

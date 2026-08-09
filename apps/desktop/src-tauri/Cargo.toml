@@ -27,3 +27,4 @@ tokio = { workspace = true }
 fix-path-env = { git = "https://github.com/tauri-apps/fix-path-env-rs" }
 sqlx = { workspace = true }
 common = { workspace = true }
+reqwest = { workspace = true }
