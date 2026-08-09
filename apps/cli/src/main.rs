@@ -2,7 +2,7 @@ use clap::{Parser, Subcommand};
 
 use common::{AppState};
 
-use crate::commands::count::count_lines;
+use crate::commands::{count::count_lines, download::download_command_interactive};
 
 mod commands;
 
@@ -45,7 +45,7 @@ async fn main() {
             count_lines(path, exclude);
         },
         Commands::Download(_) => {
-            
+            download_command_interactive();
         }
     }
 }

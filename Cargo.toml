@@ -24,3 +24,4 @@ sqlx = { version = "0.9.0", features = ["sqlite", "runtime-tokio", "migrate", "m
 ort = { version = "2.0.0-rc.13", features = ["load-dynamic", "cuda", "tensorrt", "rocm", "coreml", "directml", "migraphx"] }
 tokenizers = "0.23.1"
 ndarray = "0.17.2"
+embeddings = { path = "crates/embeddings" }

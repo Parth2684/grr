@@ -1,7 +1,10 @@
 
 mod test;
+pub mod recommend;
 
-pub enum Models {
+
+#[derive(PartialEq, Eq)]
+pub enum Precision {
     Fp32,
     Fp16,
     Int8
