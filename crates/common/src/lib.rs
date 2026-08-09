@@ -2,6 +2,7 @@ use database::connection::get_connection;
 use sqlx::{Pool, Sqlite};
 
 pub mod loc;
+pub mod hash;
 
 pub struct AppState {
     db: Pool<Sqlite>

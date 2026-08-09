@@ -12,3 +12,7 @@ pub fn get_recommendation() -> Precision {
         Precision::Fp32
     }
 }
+
+pub fn download_models(models: Vec<Precision>) {
+    
+}

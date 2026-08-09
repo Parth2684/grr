@@ -1,5 +1,5 @@
 [package]
-name = "grr"
+name = "grr-cli"
 version = "0.1.0"
 edition = "2024"
 
@@ -14,3 +14,5 @@ cli-table = "0.5.0"
 dirs = "6.0.0"
 inquire = "0.9.4"
 embeddings = { workspace = true }
+sha2 = { workspace = true }
+reqwest = { workspace = true }
