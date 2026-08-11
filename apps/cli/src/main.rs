@@ -1,10 +1,13 @@
+use std::sync::Arc;
+
 use clap::{Parser, Subcommand};
 
 use common::{AppState};
 
-use crate::commands::{count::count_lines, download::download_command_interactive};
+use crate::{commands::{count::count_lines, download::download_command_interactive}, console::Console};
 
 mod commands;
+mod console;
 
 #[derive(Parser)]
 #[command(version, about, long_about = None)]
@@ -38,14 +41,16 @@ enum Commands {
 
 #[tokio::main]
 async fn main() {
-    let state = AppState::new().await;
+    let state = Arc::new(AppState::new().await);
     let cli = Cli::parse();
     match cli.commands {
         Commands::Count { path, exclude } => {
             count_lines(path, exclude);
         },
         Commands::Download(_) => {
-            download_command_interactive(&state);
+            if let Err(err) = download_command_interactive(Arc::clone(&state)).await {
+                Console::error(err);
+            };
         }
     }
 }

@@ -4,7 +4,7 @@ use serde::Serialize;
 pub mod recommend;
 mod test;
 
-#[derive(PartialEq, Eq)]
+#[derive(PartialEq, Eq, Debug)]
 pub enum Precision {
     Fp32,
     Fp16,
@@ -59,13 +59,17 @@ impl Precision {
             ]
         }
     }
+}
 
+impl Info {
     pub fn get_tokenizer_info() -> Info {
         Info {
-            name: String::from("tokenizer.json"), 
-            size: 11417884, 
-            link: Url::parse("https://huggingface.co/Parth2684/jina-code-embeddings-0.5b-onnx/resolve/main/jina-code-embeddings-0.5b/tokenizer/tokenizer.json").unwrap(), 
-            sha256: String::from("f0c3c6d1699d808eea431043c5d9db4e6c191698789c69a5d35f11aeabc2304a") 
+            name: String::from("tokenizer.json"),
+            size: 11417884,
+            link: Url::parse("https://huggingface.co/Parth2684/jina-code-embeddings-0.5b-onnx/resolve/main/jina-code-embeddings-0.5b/tokenizer/tokenizer.json").unwrap(),
+            sha256: String::from("f0c3c6d1699d808eea431043c5d9db4e6c191698789c69a5d35f11aeabc2304a")
         }
     }
 }
+
+

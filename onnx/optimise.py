@@ -1,7 +1,6 @@
 # 3
 from pathlib import Path
 
-import onnxruntime as ort
 from onnxsim import simplify
 
 import onnx
