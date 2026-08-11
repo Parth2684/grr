@@ -1,5 +1,4 @@
 use reqwest::Url;
-use serde::Serialize;
 
 pub mod recommend;
 mod test;

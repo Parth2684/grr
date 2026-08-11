@@ -1,12 +1,21 @@
 use common::{AppState, hash::hash};
 use embeddings::{Info, Precision, recommend::get_recommendation};
-use futures::future::join_all;
+use futures::{StreamExt, future::join_all};
+use indicatif::{
+    MultiProgress, MultiProgressAlignment, ProgressBar, ProgressDrawTarget, ProgressStyle,
+};
 use inquire::MultiSelect;
-use reqwest::{Client, Url, header::RANGE};
-use std::{collections::VecDeque, fs, path::PathBuf, sync::Arc};
+use reqwest::{Client, StatusCode, Url, header::RANGE};
+use std::{
+    collections::VecDeque,
+    fs::{self, File},
+    io::Write,
+    path::PathBuf,
+    pin::Pin,
+    sync::Arc,
+};
 
 use crate::console::Console;
-
 
 pub async fn download_command_interactive(state: Arc<AppState>) -> Result<(), String> {
     let recommendation = get_recommendation();
@@ -70,6 +79,12 @@ pub async fn download_command_interactive(state: Arc<AppState>) -> Result<(), St
 
     let model_directory = &state.local_data_dir.join("models");
 
+    let multi_progress = Arc::new(MultiProgress::new());
+    multi_progress.set_alignment(MultiProgressAlignment::Top);
+    multi_progress.set_draw_target(ProgressDrawTarget::stderr());
+
+    let mut count = 0;
+
     let mut futures: VecDeque<_> = precisions
         .iter()
         .flat_map(|precision| {
@@ -77,7 +92,7 @@ pub async fn download_command_interactive(state: Arc<AppState>) -> Result<(), St
             if !model_directory.exists() {
                 fs::create_dir_all(model_directory).expect("Error creating model directory");
             }
-            
+
             infos
                 .iter()
                 .filter_map(|info| {
@@ -95,13 +110,29 @@ pub async fn download_command_interactive(state: Arc<AppState>) -> Result<(), St
                                     }
                                 }
                             };
-                            Some(download_model(info.link.clone(), continue_from, model, info.name))
+                            count += 1;
+                            Some(download_model(
+                                info.link.clone(),
+                                continue_from as u64,
+                                model,
+                                info.name.clone(),
+                                Arc::clone(&multi_progress),
+                                count,
+                            ))
                         } else {
                             Console::info(format!("{} exists", info.name));
                             None
                         }
                     } else {
-                        Some(download_model(info.link.clone(), 0, model, info.name))
+                        count += 1;
+                        Some(download_model(
+                            info.link.clone(),
+                            0,
+                            model,
+                            info.name.clone(),
+                            Arc::clone(&multi_progress),
+                            count,
+                        ))
                     }
                 })
                 .collect::<VecDeque<_>>()
@@ -111,50 +142,147 @@ pub async fn download_command_interactive(state: Arc<AppState>) -> Result<(), St
     let tokenizer = Info::get_tokenizer_info();
     let tokenizer_path = model_directory.join(tokenizer.name);
 
-    let tokenizer_hash_verify = hash(&tokenizer_path) == tokenizer.sha256;
-    
-    if !tokenizer_path.exists() | !tokenizer_hash_verify {
+    if !tokenizer_path.exists() || hash(&tokenizer_path) != tokenizer.sha256 {
         fs::remove_file(&tokenizer_path).ok();
-        futures.push_front(download_model(tokenizer.link, 0, tokenizer_path))
+        count += 1;
+        futures.push_front(download_model(
+            tokenizer.link,
+            0,
+            tokenizer_path,
+            String::from("tokenizer"),
+            Arc::clone(&multi_progress),
+            count,
+        ))
+    } else {
+        Console::info("tokenizer exists");
     }
 
-    
     let handles = join_all(futures).await;
 
     let mut errors = Vec::new();
-    
+
     for handle in handles {
         match handle {
-            Ok(name) => {
-                Console::success(format!("{:?} successfully downloaded", name))
-            }
-            Err(err) => {
-                errors.push(err)
-            }
+            Ok(name) => Console::success(format!("{:?} successfully downloaded", name)),
+            Err(err) => errors.push(err),
         }
-    } 
+    }
 
     if !errors.is_empty() {
-        return Err(errors.join("\n"))
+        return Err(errors.join("\n"));
     }
-    
+
     Ok(())
 }
 
-async fn download_model(link: Url, existing_size: u32, download_path: PathBuf, name: String) -> Result<String, String> {
-    let client = Client::new();
-    let mut request = client.get(link);
+fn download_model(
+    link: Url,
+    existing_size: u64,
+    download_path: PathBuf,
+    name: String,
+    progress: Arc<MultiProgress>,
+    count: usize,
+) -> Pin<Box<dyn Future<Output = Result<String, String>>>> {
+    Box::pin(async move {
+        let client = Client::new();
+        let mut request = client.get(link.clone());
 
-    if existing_size > 0 {
-        request = request.header(RANGE, format!("bytes={existing_size}-"));
-    }
+        let token = std::env::var("HF_TOKEN").ok();
+        if let Some(token) = token {
+            request = request.bearer_auth(token);
+        }
+        if existing_size > 0 {
+            request = request.header(RANGE, format!("bytes={existing_size}-"));
+        }
 
-    let response = request.send().await
-        .map_err(|err| {
+        let response = request.send().await.map_err(|err| {
             Console::error(err);
             format!("Error downloading {:?}", name)
         })?;
 
-    
-    Ok("".into())
+        let status = response.status();
+
+        if existing_size > 0 && status == StatusCode::PARTIAL_CONTENT {
+            Console::info("Resuming Download");
+        } else if existing_size > 0 && status == StatusCode::OK {
+            Console::info("Resuming download not working downloading again");
+            fs::remove_file(&download_path).ok();
+            return download_model(link, 0, download_path, name, Arc::clone(&progress), count)
+                .await;
+        }
+
+        let total_size = response.content_length().map(|s| s + existing_size);
+
+        let pb = match total_size {
+            Some(size) => {
+                let pb = progress.insert(0, ProgressBar::new(size));
+                pb.set_position(existing_size);
+                pb.set_style(
+                    ProgressStyle::with_template(
+                        "
+                        {msg:<35} {spinner:.green} [{elapsed_precise}] \
+                        [{bar:40.cyan/blue}] \
+                        {bytes}/{total_bytes} \
+                        ({bytes_per_sec}, {eta})
+                    ",
+                    )
+                    .map_err(|err| format!("Error showing template: {:?}", err))?,
+                );
+                pb
+            }
+            None => {
+                let pb = progress.insert(0, ProgressBar::new_spinner());
+                pb.set_style(
+                    ProgressStyle::with_template(
+                        "
+                            {msg:25} {spinner:.green} [{elapsed_precise}] \
+                            {bytes} {bytes_per_second}
+                        ",
+                    )
+                    .map_err(|err| format!("Error showing template: {:?}", err))?,
+                );
+                pb
+            }
+        };
+
+        pb.set_message(name.clone());
+        pb.set_position(existing_size);
+
+        let mut file = if existing_size > 0 {
+            File::options()
+                .append(true)
+                .open(&download_path)
+                .map_err(|err| {
+                    Console::error(format!("{err:?}"));
+                    format!("Error downloading: {:?}", name)
+                })?
+        } else {
+            File::create(&download_path).map_err(|err| {
+                Console::error(format!("{:?}", err.to_string()));
+                format!("Error downloading: {:?}", name)
+            })?
+        };
+
+        let mut stream = response.bytes_stream();
+
+        while let Some(chunk) = stream.next().await {
+            match chunk {
+                Err(err) => return Err(err.to_string()),
+                Ok(data) => match file.write_all(&data) {
+                    Err(err) => return Err(err.to_string()),
+                    Ok(_) => {
+                        pb.inc(data.len() as u64);
+                    }
+                },
+            }
+        }
+
+        file.flush().map_err(|err| {
+            Console::error(err.to_string());
+            format!("Error flushing file: {:?}", name)
+        })?;
+
+        pb.finish();
+        Ok(name)
+    })
 }
