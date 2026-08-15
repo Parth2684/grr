@@ -102,7 +102,15 @@ pub async fn download_command_interactive(state: Arc<AppState>) -> Result<(), St
                         if local_hash != info.sha256 {
                             let continue_from = {
                                 match fs::metadata(&model) {
-                                    Ok(data) => data.len() as u32,
+                                    Ok(data) => {
+                                        if data.len() as u32 == info.size {
+                                            Console::warn(format!("{}: File corrupted", info.name));
+                                            fs::remove_file(&model).ok();
+                                            0
+                                        }else{
+                                            data.len() as u32
+                                        }
+                                    },
                                     Err(err) => {
                                         Console::warn(format!("Error getting file size: {}", err));
                                         fs::remove_file(&model).ok();
@@ -215,7 +223,7 @@ fn download_model(
 
         let pb = match total_size {
             Some(size) => {
-                let pb = progress.insert(0, ProgressBar::new(size));
+                let pb = progress.insert(count, ProgressBar::new(size));
                 pb.set_position(existing_size);
                 pb.set_style(
                     ProgressStyle::with_template(
@@ -231,7 +239,7 @@ fn download_model(
                 pb
             }
             None => {
-                let pb = progress.insert(0, ProgressBar::new_spinner());
+                let pb = progress.insert(count, ProgressBar::new_spinner());
                 pb.set_style(
                     ProgressStyle::with_template(
                         "

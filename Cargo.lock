@@ -2370,6 +2370,7 @@ dependencies = [
  "indicatif",
  "inquire",
  "reqwest",
+ "serde_json",
  "sha2 0.11.0",
  "sqlx",
  "tokio 1.53.1",
@@ -3184,6 +3185,10 @@ dependencies = [
  "serde",
  "unicode-segmentation",
 ]
+
+[[package]]
+name = "lang-parse"
+version = "0.1.0"
 
 [[package]]
 name = "lazy_static"

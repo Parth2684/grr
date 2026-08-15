@@ -54,3 +54,64 @@ async fn main() {
         }
     }
 }
+
+
+// #[cfg(test)] 
+// mod test {
+//     #[test]
+//     fn get_json() {
+//         use serde_json::{Value};
+//         use std::{fs};
+        
+//         fn limit_arrays(value: &mut Value, limit: usize) {
+//             match value {
+//                 Value::Array(array) => {
+//                     // Keep only the first `limit` elements
+//                     array.truncate(limit);
+        
+//                     // Recursively process nested structures
+//                     for item in array {
+//                         limit_arrays(item, limit);
+//                     }
+//                 }
+        
+//                 Value::Object(object) => {
+//                     // Recursively process every value in the object
+//                     for value in object.values_mut() {
+//                         limit_arrays(value, limit);
+//                     }
+//                 }
+        
+//                 _ => {}
+//             }
+//         }
+        
+//         fn test() -> Result<(), Box<dyn std::error::Error>> {
+            
+        
+//             let input = "rustanalyzer.json";
+//             let output = "structure.json";
+        
+//             // Read input JSON
+//             let contents = fs::read_to_string(input)?;
+        
+//             // Parse JSON
+//             let mut json: Value = serde_json::from_str(&contents)?;
+        
+//             // Keep top 5 elements from every array
+//             limit_arrays(&mut json, 5);
+        
+//             // Write formatted JSON
+//             let output_json = serde_json::to_string_pretty(&json)?;
+        
+//             fs::write(output, output_json)?;
+        
+//             println!("Written to {output}");
+        
+//             Ok(())
+//         }
+
+//         test();
+//         assert_eq!(0,0)
+//     }
+// }

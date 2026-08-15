@@ -1,6 +1,7 @@
 [workspace]
 resolver = "3"
-members = ["apps/cli","apps/desktop/src-tauri", "crates/common", "crates/database", "crates/embeddings"]
+members = ["apps/cli","apps/desktop/src-tauri", "crates/common", "crates/database", "crates/embeddings", "crates/lang-parse"]
+
 
 [profile.release.package."*"]
 opt-level = 3

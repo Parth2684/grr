@@ -3,7 +3,7 @@ use std::{fs, path::PathBuf};
 use database::connection::get_connection;
 use sqlx::{Pool, Sqlite};
 
-pub mod loc;
+pub mod tokei;
 pub mod hash;
 
 #[derive(Clone)]

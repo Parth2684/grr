@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use cli_table::{Cell, CellStruct, Style, Table, format::{Border, Justify}, print_stdout};
-use common::loc::count_loc;
+use common::tokei::count_loc;
 
 
 
