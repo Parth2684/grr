@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use lang_parse::download::Language;
 use clap::{Parser, Subcommand};
 
 use common::{AppState};
@@ -20,7 +21,11 @@ struct Cli {
 
 #[derive(Subcommand, Clone)]
 enum DownloadSubcommand {
-    Model,
+    Models,
+    Languages {
+        #[arg(long, short, value_delimiter = ',')]
+        language: Vec<Language>
+    }
 }
 
 #[derive(Parser, Clone)]
@@ -47,10 +52,17 @@ async fn main() {
         Commands::Count { path, exclude } => {
             count_lines(path, exclude);
         },
-        Commands::Download(_) => {
-            if let Err(err) = download_command_interactive(Arc::clone(&state)).await {
-                Console::error(err);
-            };
+        Commands::Download(what) => {
+            match what.command {
+                DownloadSubcommand::Models => {
+                    if let Err(err) = download_command_interactive(Arc::clone(&state)).await {
+                        Console::error(err);
+                    };
+                }
+                DownloadSubcommand::Languages { language } => {
+                    todo!()
+                }
+            }
         }
     }
 }

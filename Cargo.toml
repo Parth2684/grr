@@ -21,14 +21,17 @@ overflow-checks = false
 debug-assertions = false
 
 [workspace.dependencies]
-tokio = { version = "1", features = ["full"] }
 database = { path = "crates/database" }
 common = { path = "crates/common" }
+embeddings = { path = "crates/embeddings" }
+lang-parse = { path = "crates/lang-parse" }
+tokio = { version = "1", features = ["full"] }
 sqlx = { version = "0.9.0", features = ["sqlite", "runtime-tokio", "migrate", "macros", "chrono"] }
 ort = { version = "2.0.0-rc.13", features = ["load-dynamic", "cuda", "tensorrt", "rocm", "coreml", "directml", "migraphx"] }
 tokenizers = "0.23.1"
 ndarray = "0.17.2"
-embeddings = { path = "crates/embeddings" }
 sha2 = "0.11.0"
-reqwest = { version = "0.13.4", features = ["json"] }
+reqwest = { version = "0.13.4", features = ["json", "stream"] }
 futures = "0.3.33"
+serde = { version = "1.0.229", features = ["derive"] }
+clap = { version = "4.6.5", features = ["derive"] }

@@ -2369,7 +2369,9 @@ dependencies = [
  "futures 0.3.33",
  "indicatif",
  "inquire",
+ "lang-parse",
  "reqwest",
+ "serde",
  "serde_json",
  "sha2 0.11.0",
  "sqlx",
@@ -3189,6 +3191,11 @@ dependencies = [
 [[package]]
 name = "lang-parse"
 version = "0.1.0"
+dependencies = [
+ "clap",
+ "common",
+ "serde",
+]
 
 [[package]]
 name = "lazy_static"
