@@ -76,7 +76,7 @@ async fn download_rust() -> Result<(), String> {
     }
     else {
         let ra_install = TokioCommand::new("rustup")
-        .args(["component", "add", "rust-src"])
+        .args(["component", "add", "rust-analyzer"])
         .stdout(Stdio::null())
         .stderr(Stdio::null())
         .status()
@@ -89,6 +89,7 @@ async fn download_rust() -> Result<(), String> {
                 if !status.success() {
                     Err(String::from("Error adding rust-analyzer. Please install it manually"))
                 }else {
+                    println!("success downloading rust-analyzer");
                     Ok(())
                 }
             }

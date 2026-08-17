@@ -1,5 +1,6 @@
-use std::sync::Arc;
+use std::{sync::Arc, time::Duration};
 
+use indicatif::ProgressBar;
 use lang_parse::download::{Language, download_languages};
 use clap::{Parser, Subcommand};
 
@@ -66,9 +67,15 @@ async fn main() {
                         }
                     }
                     else {
+                        let pb = ProgressBar::new_spinner();
+                        pb.enable_steady_tick(Duration::from_millis(500));
+                        for language in &languages {
+                            pb.set_message(format!("Downloading: {}", language));
+                        }
                         if let Err(err) = download_languages(languages).await {
                             Console::error(err);
                         }
+                        pb.finish_and_clear();
                     }
                 }
             }
