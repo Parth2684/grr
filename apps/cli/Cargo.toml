@@ -22,3 +22,4 @@ future-utils = "0.12.1"
 serde_json = "1.0.151"
 serde = { workspace = true }
 lang-parse = { workspace = true }
+strum = { workspace = true }

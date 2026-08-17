@@ -5,14 +5,11 @@ use indicatif::{
     MultiProgress, MultiProgressAlignment, ProgressBar, ProgressDrawTarget, ProgressStyle,
 };
 use inquire::MultiSelect;
+use lang_parse::download::{Language, download_languages};
 use reqwest::{Client, StatusCode, Url, header::RANGE};
+use strum::IntoEnumIterator;
 use std::{
-    collections::VecDeque,
-    fs::{self, File},
-    io::Write,
-    path::PathBuf,
-    pin::Pin,
-    sync::Arc,
+    collections::VecDeque, fs::{self, File}, io::Write, path::PathBuf, pin::Pin, sync::Arc, time::Duration
 };
 
 use crate::console::Console;
@@ -293,4 +290,25 @@ fn download_model(
         pb.finish();
         Ok(name)
     })
+}
+
+
+
+
+pub async fn download_languages_interactive() -> Result<(), String> {
+    let options = Language::iter().collect();
+    let to_download = MultiSelect::new("Select Languages to download", options)
+        .prompt()
+        .map_err(|err| {
+            err.to_string()
+        })?;
+    let pb = ProgressBar::new_spinner();
+    pb.enable_steady_tick(Duration::from_millis(500));
+    for language in &to_download {
+        pb.set_message(format!("Downloading: {}", language));
+    }
+    
+    let result = download_languages(to_download).await;
+    pb.finish_and_clear();
+    result
 }

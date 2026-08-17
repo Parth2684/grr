@@ -7,3 +7,6 @@ edition = "2024"
 common = { workspace = true }
 clap = { workspace = true }
 serde = { workspace = true }
+tokio = { workspace = true }
+futures = { workspace = true }
+strum = { workspace = true }
