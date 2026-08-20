@@ -296,7 +296,12 @@ fn download_model(
 
 
 pub async fn download_languages_interactive() -> Result<(), String> {
-    let options = Language::iter().collect();
+    let options = Language::iter().map(|lang| {
+        match lang {
+            Language::Rust => format!("{}: rustup should be installed in the system", lang),
+            Language::TypeScript => format!("{}: npm should be installed in the system", lang)
+        }
+    }).collect();
     let to_download = MultiSelect::new("Select Languages to download", options)
         .prompt()
         .map_err(|err| {
@@ -307,6 +312,17 @@ pub async fn download_languages_interactive() -> Result<(), String> {
     for language in &to_download {
         pb.set_message(format!("Downloading: {}", language));
     }
+
+    let to_download = to_download
+        .iter()
+        .map(|lang| {
+            if lang.starts_with("Rust"){
+                Language::Rust
+            } 
+            else {
+                Language::TypeScript
+            }
+        }).collect();
     
     let result = download_languages(to_download).await;
     pb.finish_and_clear();
