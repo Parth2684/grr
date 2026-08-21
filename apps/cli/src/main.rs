@@ -1,4 +1,4 @@
-use std::{sync::Arc, time::Duration};
+use std::{path::PathBuf, sync::Arc, time::Duration};
 
 use indicatif::ProgressBar;
 use lang_parse::download::{Language, download_languages};
@@ -12,7 +12,7 @@ mod commands;
 mod console;
 
 #[derive(Parser)]
-#[command(version, about, long_about = None)]
+#[command(version, about="grr is a code analysis and rag tool", long_about = "")]
 #[command(name = "grr")]
 struct Cli {
     #[command(subcommand)]
@@ -22,9 +22,12 @@ struct Cli {
 
 #[derive(Subcommand, Clone)]
 enum DownloadSubcommand {
+    /// Download required models
     Models,
+    /// Download tooling for langauges
+    /// Run without langauages flag to select languages manually
     Languages {
-        #[arg(long, short, value_delimiter = ',')]
+        #[arg(long, short, value_delimiter = ',', help = " Languages to install. \n example: \n grr download languages -l rust,typescript OR \n grr download languages -l rust -l typescript\n")]
         languages: Vec<Language>
     }
 }
@@ -37,12 +40,21 @@ struct DownloadCommand {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Count lines of code in a project
     Count {
-        path: String,
+        /// Path to project 
+        path: PathBuf,
+        /// Comma Separated values for directories or files to ignore
         #[arg(long, short, value_delimiter = ',')]
         exclude: Vec<String>,
     },
-    Download(DownloadCommand)
+    /// Download Command for required tools/models
+    Download(DownloadCommand),
+    /// Analyze a codebase
+    Analyze {
+        /// Path to project
+        path: PathBuf
+    }
 }
 
 #[tokio::main]
@@ -79,6 +91,9 @@ async fn main() {
                     }
                 }
             }
+        }
+        Commands::Analyze { path } => {
+            todo!()
         }
     }
 }

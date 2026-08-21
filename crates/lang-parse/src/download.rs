@@ -8,8 +8,8 @@ use tokio::process::Command as TokioCommand;
 
 #[derive(Serialize, Deserialize, ValueEnum, Clone, EnumIter)]
 pub enum Language {
-    #[allow(missing_docs)]  #[serde(alias = "Rust")] #[value(alias = "Rust")]  Rust,
-    #[allow(missing_docs)]  #[serde(alias = "TypeScript")] #[value(alias = "TypeScript")]  TypeScript,
+    #[allow(missing_docs)]  #[serde(alias = "Rust")] #[value(name = "rust")]  Rust,
+    #[allow(missing_docs)]  #[serde(alias = "TypeScript")] #[value(name = "typescript")]  TypeScript,
 }
 
 impl Display for Language {

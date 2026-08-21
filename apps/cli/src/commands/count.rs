@@ -6,8 +6,7 @@ use common::tokei::count_loc;
 
 
 
-pub fn count_lines (path: String, exclude: Vec<String>) {
-    let path: PathBuf = PathBuf::from(path);
+pub fn count_lines (path: PathBuf, exclude: Vec<String>) {
     let exclude_strs: Vec<&str> = exclude
         .iter()
         .map(|s| s.as_str()) // or .map(AsRef::as_ref)
