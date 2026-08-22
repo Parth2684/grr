@@ -1,4 +1,4 @@
-use common::{AppState, hash::hash};
+use common::{AppState, hash::hash_sha256};
 use embeddings::{Info, Precision, recommend::get_recommendation};
 use futures::{StreamExt, future::join_all};
 use indicatif::{
@@ -95,7 +95,7 @@ pub async fn download_command_interactive(state: Arc<AppState>) -> Result<(), St
                 .filter_map(|info| {
                     let model = model_directory.join(&info.name);
                     if model.exists() {
-                        let local_hash = hash(&model);
+                        let local_hash = hash_sha256(&model);
                         if local_hash != info.sha256 {
                             let continue_from = {
                                 match fs::metadata(&model) {
@@ -147,7 +147,7 @@ pub async fn download_command_interactive(state: Arc<AppState>) -> Result<(), St
     let tokenizer = Info::get_tokenizer_info();
     let tokenizer_path = model_directory.join(tokenizer.name);
 
-    if !tokenizer_path.exists() || hash(&tokenizer_path) != tokenizer.sha256 {
+    if !tokenizer_path.exists() || hash_sha256(&tokenizer_path) != tokenizer.sha256 {
         fs::remove_file(&tokenizer_path).ok();
         count += 1;
         futures.push_front(download_model(

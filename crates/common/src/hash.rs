@@ -4,9 +4,10 @@ use std::{
     path::Path,
 };
 
+use blake3::hash;
 use sha2::{Digest, Sha256};
 
-pub fn hash<P: AsRef<Path>>(path: P) -> String {
+pub fn hash_sha256<P: AsRef<Path>>(path: P) -> String {
     let file = File::open(path).unwrap();
     let mut reader = BufReader::new(file);
     let mut hasher = Sha256::new();
@@ -21,4 +22,9 @@ pub fn hash<P: AsRef<Path>>(path: P) -> String {
     }
 
     hex::encode(hasher.finalize())
+}
+
+
+pub fn hash_blake3(to_hash: &str) -> String {
+    hash(to_hash.as_bytes()).to_string()
 }

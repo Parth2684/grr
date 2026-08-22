@@ -93,7 +93,7 @@ async fn main() {
             }
         }
         Commands::Analyze { path } => {
-            todo!()
+            
         }
     }
 }
