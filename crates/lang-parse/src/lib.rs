@@ -1,4 +1,5 @@
 pub mod download;
+pub mod tree_sitter;
 
 pub struct CodeRange {
     start_line: u32,

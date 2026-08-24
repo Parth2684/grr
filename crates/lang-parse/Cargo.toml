@@ -10,3 +10,6 @@ serde = { workspace = true }
 tokio = { workspace = true }
 futures = { workspace = true }
 strum = { workspace = true }
+tree-sitter = "0.26.13"
+tree-sitter-rust = "0.24.2"
+tree-sitter-javascript = "0.25.0"
