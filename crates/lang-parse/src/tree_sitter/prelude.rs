@@ -1,2 +1,12 @@
 pub use super::languages::rust as Rust;
 pub use super::languages::javascript as JavaScript;
+pub use super::languages::typescript as TypeScript;
+pub use super::languages::tsx as Tsx;
+pub use super::languages::python as Python;
+pub use super::languages::go as Go;
+pub use super::languages::sql as Sql;
+pub use super::languages::html as Html;
+pub use super::languages::css as Css;
+pub use super::languages::c as Clang;
+pub use super::languages::cpp as Cpp;
+pub use super::languages::zig as Zig;
