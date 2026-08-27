@@ -3,12 +3,12 @@ resolver = "3"
 members = ["apps/cli","apps/desktop/src-tauri", "crates/common", "crates/database", "crates/embeddings", "crates/lang-parse"]
 
 [profile.dev]
+opt-level = 0
+debug = 1
 incremental = true
+codegen-units = 256
 
 [profile.release.package."*"]
-opt-level = 3
-
-[profile.dev.package."*"]
 opt-level = 3
 
 [profile.release]

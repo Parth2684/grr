@@ -13,6 +13,7 @@ pub mod c;
 pub mod cpp;
 pub mod zig;
 
+#[derive(Debug)]
 pub enum CustomError {
     LanguageError(LanguageError),
     String(String)

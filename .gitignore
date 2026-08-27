@@ -7,3 +7,4 @@ quantized
 tokenizer
 node_modules
 wasms
+*.txt

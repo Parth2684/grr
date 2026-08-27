@@ -3737,6 +3737,7 @@ dependencies = [
  "futures 0.3.33",
  "serde",
  "strum 0.28.0",
+ "tokei",
  "tokio 1.53.1",
  "tree-sitter",
  "tree-sitter-c",
