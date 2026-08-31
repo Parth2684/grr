@@ -6,4 +6,4 @@ pub fn parse(code: &str) -> Result<Tree, CustomError> {
     parse_code(code, tree_sitter_sequel::LANGUAGE.into())
 }
 
-// kind: statement
+// kind: statement✅

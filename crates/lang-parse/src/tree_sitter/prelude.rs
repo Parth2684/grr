@@ -1,5 +1,6 @@
 use tree_sitter::Tree;
 
+use crate::tree_sitter::languages;
 use crate::tree_sitter::languages::CustomError;
 use crate::tree_sitter::languages::Extract;
 
@@ -51,7 +52,16 @@ impl Language {
 }
 
 
-impl Extract for Language {
-    
-}
+impl Extract for Language { }
 
+
+#[cfg(test)]
+#[test]
+fn test_extractor() {
+    use std::fs;
+
+    let code = fs::read_to_string("./src/lib.rs").unwrap();
+    let tree = Rust::parse(&code).unwrap();
+    let extracted = Language::extract(tree, &code);
+    fs::write("./extracted.txt", format!("{:#?}", extracted)).unwrap();
+}

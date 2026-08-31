@@ -7,9 +7,9 @@ pub fn parse(code: &str) -> Result<Tree, CustomError> {
 }
 
 
-// const_declaration -> level 1
+// const_declaration -> level 1✅
 // function_declaration
 // type_declaration
-// var_declaration -> Level 1
+// var_declaration -> Level 1✅
 // method_declaration
  
