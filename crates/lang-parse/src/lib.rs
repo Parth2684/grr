@@ -43,14 +43,28 @@ use ::tree_sitter::Node;
 
 fn test_tree_sitter(lang: &LanguageType, path: &str, file_name: &str, lang_parse: Language) {
     let langs = common::tokei::get_files(path);
+    
+        let files = langs
+            .get(lang)
+            .into_iter()
+            .flatten()
+            .chain(
+                match lang {
+                    LanguageType::C => langs.get(&LanguageType::CHeader),
+                    LanguageType::Cpp => {
+                        langs.get(&LanguageType::CppHeader);
+                        langs.get(&LanguageType::CHeader)
+                    },
+                    _ => None,
+                }
+                .into_iter()
+                .flatten(),
+            );
 
-    let rust_files = langs
-        .get(lang)
-        .expect("No rust files found");
-
+    
     let mut output = String::new();
 
-    for file in rust_files {
+    for file in files {
         let code = std::fs::read_to_string(file).unwrap();
         let tree = lang_parse.parse(&code).unwrap();
 
@@ -130,5 +144,39 @@ fn write_tree(node: Node, output: &mut String, prefix: &str, is_last: bool) {
     fn test_sql () {
         test_tree_sitter(&LanguageType::Sql, "../../", "sql-trees.txt", Language::Sql);
     }
+
+    #[test]
+    fn test_python () {
+        test_tree_sitter(&LanguageType::Python, "../../../test/request", "python-trees.txt", Language::Python);
+    }
     
+    #[test]
+    fn test_c () {
+        test_tree_sitter(&LanguageType::C, "../../../test/sds", "c-trees.txt", Language::Clang);
+    }
+
+    #[test]
+    fn test_go() {
+        test_tree_sitter(&LanguageType::Go, "../../../test/cobra", "go-trees.txt", Language::Go);
+    }
+
+    #[test]
+    fn test_cpp() {
+        test_tree_sitter(&LanguageType::Cpp, "../../../test/spdlog", "cpp-trees.txt", Language::Cpp);
+    }
+
+    #[test]
+    fn test_html() {
+        test_tree_sitter(&LanguageType::Html, "../../../test/github-markdown-css", "html-trees.txt", Language::Html);
+    }
+
+    #[test]
+    fn test_css() {
+        test_tree_sitter(&LanguageType::Css, "../../../test/github-markdown-css", "css-trees.txt", Language::Css);
+    }
+
+    #[test]
+    fn test_zig() {
+        test_tree_sitter(&LanguageType::Zig, "../../../test/libxev", "zig-trees.txt", Language::Zig);
+    }
 }

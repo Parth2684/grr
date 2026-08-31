@@ -16,4 +16,4 @@ pub fn parse(code: &str) -> Result<Tree, CustomError> {
 // const -> const_item
 // trait -> trait_item
 // macro -> macro_definition
-// static -> static_item
+// static -> static_item level 1

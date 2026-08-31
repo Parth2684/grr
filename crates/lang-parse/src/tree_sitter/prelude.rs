@@ -1,6 +1,7 @@
 use tree_sitter::Tree;
 
 use crate::tree_sitter::languages::CustomError;
+use crate::tree_sitter::languages::Extract;
 
 use super::languages::rust as Rust;
 use super::languages::javascript as JavaScript;
@@ -48,3 +49,9 @@ impl Language {
         }
     }
 }
+
+
+impl Extract for Language {
+    
+}
+
