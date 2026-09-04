@@ -29,8 +29,8 @@ pub enum CustomRecurse {
     #[strum(serialize = "struct_specifier")] StructSpecifier, // C++
     #[strum(serialize = "type_declaration")] TypeDeclaration, 
     #[strum(serialize = "method_declaration")] MethodDeclaration, // go
-    #[strum(serialize = "struct_item")] StructItem,
     #[strum(serialize = "impl_item")] ImplItem,
+    #[strum(serialize = "struct_item")] StructItem,
     #[strum(serialize = "trait_item")] TraitItem, //rust
     #[strum(serialize = "class_declaration")] ClassDeclaration, 
     #[strum(serialize = "public_field_definition")] PublicFieldDefinition, //group
@@ -131,7 +131,7 @@ impl Kind {
             StopRecurse::ComptimeDeclaration => Self::Declaration,
             StopRecurse::TestDeclaration => Self::Function,
             StopRecurse::JsxElement => Self::JsxTsx,
-            StopRecurse::AttributeItem => Self::Skip
+            StopRecurse::AttributeItem => Self::Skip,
         }
     }
 
@@ -141,13 +141,13 @@ impl Kind {
             CustomRecurse::StructSpecifier => Self::Struct,
             CustomRecurse::TypeDeclaration => Self::Type,
             CustomRecurse::MethodDeclaration => Self::Method,
-            CustomRecurse::StructItem => Self::Struct,
             CustomRecurse::ImplItem => Self::Skip,
             CustomRecurse::TraitItem => Self::Skip,
             CustomRecurse::ClassDeclaration => Self::Skip,
             CustomRecurse::PublicFieldDefinition => Self::Struct,
             CustomRecurse::MethodeDefinition => Self::Method,
             CustomRecurse::HtmlElement => Self::HtmlCss,
+            CustomRecurse::StructItem => Self::Struct
         }
     }
 }
