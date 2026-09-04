@@ -1,8 +1,10 @@
+use std::str::FromStr;
+
 use serde::Serialize;
 use tree_sitter::{Language, LanguageError, Node, Parser, Tree};
 use uuid::{ContextV7, Timestamp, Uuid};
 
-use crate::tree_sitter::languages::helpers::kind::Kind;
+use crate::tree_sitter::languages::helpers::kind::{CustomRecurse, Kind, LevelOne, Recurse, StopRecurse};
 mod helpers;
 
 pub mod c;
@@ -46,21 +48,89 @@ pub struct Extracted {
     end_line: usize,
     end_column: usize,
     parent: Option<Uuid>,
+    r#type: RecurseType
+}
+
+#[derive(Debug, Serialize)]
+pub enum RecurseType {
+    Recurse(Recurse),
+    LevelOne(LevelOne),
+    StopRecurse(StopRecurse),
+    CustomRecurse(CustomRecurse),
 }
 
 
-fn walk(node: Node, extracts: &mut Vec<Extracted>, walked: &Vec<usize>) {
+fn walk(node: Node, extracts: &mut Vec<Extracted>, walked: &[usize], code: &str, context: &ContextV7) {
     let mut cursor = node.walk();
-    for child in node.named_children(&mut cursor) {
-        if walked.binary_search(&child.id()).is_ok() {
-            return
-        }else {
-            
-        }
-    }
 
-    if node.child_count() == 0 {
-        return;
+    for child in node.named_children(&mut cursor) {
+        if let Ok(r#type) = LevelOne::from_str(child.kind()) {
+            let kind = Kind::from_level_one(&r#type);
+            let start = child.start_position();
+            let end = child.end_position();
+
+            extracts.push(Extracted {
+                id: Uuid::new_v7(Timestamp::now(context)),
+                kind,
+                code: code[child.byte_range()].to_owned(),
+                start_line: start.row,
+                start_column: start.column,
+                end_line: end.row,
+                end_column: end.column,
+                parent: None,
+                r#type: RecurseType::LevelOne(r#type)
+            });
+
+            continue;
+        }else if let Ok(r#type) = StopRecurse::from_str(child.kind()) {
+            let kind = Kind::from_stop_recurse(&r#type);
+            let start = child.start_position();
+            let end = child.end_position();
+
+            extracts.push(Extracted {
+                id: Uuid::new_v7(Timestamp::now(context)),
+                kind,
+                code: code[child.byte_range()].to_owned(),
+                start_line: start.row,
+                start_column: start.column,
+                end_line: end.row,
+                end_column: end.column,
+                parent: None,
+                r#type: RecurseType::StopRecurse(r#type)
+            });
+            continue;
+        }else if let Ok(r#type) = Recurse::from_str(child.kind()) {
+            let kind = Kind::from_recurse(&r#type);
+            let start = child.start_position();
+            let end = child.end_position();
+
+            extracts.push(Extracted {
+                id: Uuid::new_v7(Timestamp::now(context)),
+                kind,
+                code: code[child.byte_range()].to_owned(),
+                start_line: start.row,
+                start_column: start.column,
+                end_line: end.row,
+                end_column: end.column,
+                parent: None,
+                r#type: RecurseType::Recurse(r#type)
+            });
+            walk(child, extracts, walked, code, context);
+        }else if let Ok(r#type) = CustomRecurse::from_str(child.kind()) {
+            match r#type {
+                CustomRecurse::ClassSpecifier => todo!(),
+                CustomRecurse::StructSpecifier => todo!(),
+                CustomRecurse::TypeDeclaration => todo!(),
+                CustomRecurse::MethodDeclaration => todo!(),
+                CustomRecurse::StructItem => todo!(),
+                CustomRecurse::ImplItem => todo!(),
+                CustomRecurse::TraitItem => todo!(),
+                CustomRecurse::ClassDeclaration => todo!(),
+                CustomRecurse::PublicFieldDefinition => todo!(),
+                CustomRecurse::MethodeDefinition => todo!(),
+                CustomRecurse::HtmlElement => todo!(),
+            }
+        }
     }
 }
 
@@ -73,13 +143,14 @@ pub trait Extract {
         let root = tree.root_node();
         let mut cursor = root.walk();
         for child in root.named_children(&mut cursor) {
-            if let Some(name) = Kind::from_level_one(child.kind()) {
+            if let Ok(name) = LevelOne::from_str(child.kind()) {
+                let kind = Kind::from_level_one(name);
                 let id = Uuid::new_v7(Timestamp::now(&context));
                 let start_point = child.start_position();
                 let end_point = child.end_position();
                 let code = code[child.byte_range()].to_owned();
                 extracts.push(Extracted {
-                    kind: name,
+                    kind,
                     start_line: start_point.row,
                     start_column: start_point.column,
                     end_line: end_point.row,
@@ -92,8 +163,14 @@ pub trait Extract {
             }
         }
 
-        extracts.sort();
+        walked.sort();
+        for child in root.named_children(&mut cursor) {
+            if walked.binary_search(&child.id()).is_ok() {
+                continue;
+            }
         
+            walk(child, &mut extracts, &walked, code, &context);
+        }
         extracts
     }
 }

@@ -7,13 +7,13 @@ pub fn parse(code: &str) -> Result<Tree, CustomError> {
 }
 
 
-// function -> function_item include attribute_item above it if exists
-// enum -> enum_item attribute_item above it if exists
-// struct -> struct_item include attribute_item above it if exists
-// impl -> impl_item
-// methods -> fns inside impl_item
-// type -> type_item
-// const -> const_item
-// trait -> trait_item
-// macro -> macro_definition
+// function -> function_item include attribute_item above it if exists✅
+// enum -> enum_item attribute_item above it if exists✅
+// struct -> struct_item include attribute_item above it if exists✅
+// impl -> impl_item✅
+// methods -> fns inside impl_item✅
+// type -> type_item✅
+// const -> const_item✅
+// trait -> trait_item✅
+// macro -> macro_definition✅
 // static -> static_item level 1 ✅

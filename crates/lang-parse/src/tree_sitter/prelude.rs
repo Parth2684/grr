@@ -1,6 +1,5 @@
 use tree_sitter::Tree;
 
-use crate::tree_sitter::languages;
 use crate::tree_sitter::languages::CustomError;
 use crate::tree_sitter::languages::Extract;
 

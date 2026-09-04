@@ -7,7 +7,7 @@ pub fn parse(code: &str) -> Result<Tree, CustomError> {
 }
 
 
-// variable_declaration -> top level only group one liners
-// comptime_declaration
-// test_declaration
-// function_declaration
+// variable_declaration -> top level only group one liners✅
+// comptime_declaration ✅
+// test_declaration✅ 
+// function_declaration✅

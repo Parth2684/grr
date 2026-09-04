@@ -9,7 +9,7 @@ pub fn parse(code: &str) -> Result<Tree, CustomError> {
 
 // if_statement level 1 ✅
 // try_statement level 1 -> functions ✅
-// function_definition
-// expression_statement 
-// class_definition 
-// decorated_definition -> ignore function inside it as function
+// function_definition ✅
+// expression_statement✅ 
+// class_definition ✅
+// decorated_definition -> ignore function inside it as function ✅

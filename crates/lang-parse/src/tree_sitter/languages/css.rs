@@ -6,11 +6,6 @@ pub fn parse(code: &str) -> Result<Tree, CustomError> {
     parse_code(code, tree_sitter_css::LANGUAGE.into())
 }
 
-pub fn extract() {
-    
-}
-
 
 // rule_set✅
 // media_statement✅
-// 

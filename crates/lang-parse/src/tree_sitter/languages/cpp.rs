@@ -7,11 +7,11 @@ pub fn parse(code: &str) -> Result<Tree, CustomError> {
 }
 
 
-// function_definition
+// function_definition✅
 // preproc_if  -> Level 1 ✅
 // preproc_ifdef -> Level 1 ✅
 // namespace_definition✅
-// class_specifier 
+// class_specifier ✅
 // field_declaration group with according to class_specifier 
-// struct_specifier
+// struct_specifier✅
 // enum_specifier -> level 1✅
